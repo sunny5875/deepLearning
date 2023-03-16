@@ -10,6 +10,10 @@ k = 5000 # iteration 수
 def sigmoid(x):
     return 1 / (1 +np.exp(-x))
 
+
+def cross_entropy_loss(y_hat, y):
+    return -(y*np.log10(y_hat + 1e-10) + (1-y)*np.log10(1-y_hat + 1e-10))
+
 def generateSample():
     x1_train = []
     x2_train = []
@@ -128,17 +132,20 @@ def executeBinaryClassificationUsingVectorization():
 
     
     for i in range(k): 
-        J = np.float64(0.0)
+        J = np.zeros((2,m),float)
         dw1 = np.float64(0.0)
         dw2 = np.float64(0.0)
         db = np.float64(0.0)
 
         Z = np.dot(W.T, X) + b
         A = sigmoid(Z)
+        J += cross_entropy_loss(A, Y)
+
         dZ = A - Y
         dw = 1/m * X @ dZ.T
         db = 1/m * np.sum(dZ)
-
+        
+        J /= m
         W = W - alpha * dw
         b = b - alpha * db
 
@@ -154,7 +161,8 @@ def executeBinaryClassificationUsingVectorization():
                     if 0 == Y[0,i]:
                         realScore += 1
     
-            print(i+1,"th accuracy: ",realScore/m * 100)    
+            print(i+1,"th accuracy: ",realScore/m * 100) 
+            print(i+1,"th cost: ", np.mean(J))   
      
 
     print("result parameters: ", w1 , w2, b)
