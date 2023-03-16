@@ -19,7 +19,7 @@ def generateSample():
         x1_train.append(random.uniform(-10,10))
         x2_train.append(random.uniform(-10,10))
 
-        if x1_train[-1] + x1_train[-1] > 0:
+        if x1_train[-1] < -5 or x1_train[-1] > 5:
             y_train.append(1)
             count += 1
         else:
@@ -37,7 +37,7 @@ def generateSampleMatrix():
         X[0,i] =  x_train[0,0]
         X[1,i] =  x_train[0,1]
       
-        if x_train[0,0] + x_train[0,1] > 0:
+        if x_train[0,0] < -5 or x_train[0,1] > 5:
             Y[0,i] = 1
             count += 1
         else:
@@ -78,7 +78,12 @@ def executeBinaryClassification():
             dw1 += x2_train[j] * dz
             db  += dz
 
-            if a[-1] == y_train[j]:
+            sample = 0
+            if a[-1] > 0.5:
+                sample = 1
+            else:
+                sample = 0
+            if sample == y_train[j]:
                 predictOutput += 1
            
         J /= np.float64(m)
@@ -91,7 +96,7 @@ def executeBinaryClassification():
 
         if (i+1) % 500 == 0 :
             print(i+1,"th update parameter: ", w1 , w2, b)
-            print(i+1, "th update accuracy: ",predictOutput / m * 100)
+            print(i+1, "th update accuracy: ",J, predictOutput / m * 100.0)
      
 
     print("result parameters: ", w1 , w2, b)
@@ -128,8 +133,6 @@ def executeBinaryClassificationUsingVectorization():
         dw2 = np.float64(0.0)
         db = np.float64(0.0)
 
-        # J += - (y_train[j] * math.log(a[-1]) + (1-y_train[j]) * math.log(1-a[-1]))
-
         Z = np.dot(W.T, X) + b
         A = sigmoid(Z)
         dZ = A - Y
@@ -142,6 +145,16 @@ def executeBinaryClassificationUsingVectorization():
 
         if (i+1) % 500 == 0 :
             print(i+1,"th update parameter: ", w1 , w2, b)
+            realScore = 0
+            for i in range(m):
+                if A[0,i] > limit:
+                    if 1 == Y[0,i]:
+                        realScore += 1
+                else:
+                    if 0 == Y[0,i]:
+                        realScore += 1
+    
+            print(i+1,"th accuracy: ",realScore/m * 100)    
      
 
     print("result parameters: ", w1 , w2, b)
