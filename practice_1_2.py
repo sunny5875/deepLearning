@@ -73,6 +73,7 @@ def executeSimpleNeuralNetworkUsingVectorization():
         dW1 = float(1.0/m) * dZ1 @ X.T #(2,2)
         dB1 = float(1.0/m) * np.sum(dZ1, axis = 1, keepdims = True)#(2,1)
 
+
         W1 = W1 - alpha * dW1
         B1 = B1 - alpha * dB1
         W2 = W2 - alpha * dW2
@@ -95,7 +96,7 @@ def executeSimpleNeuralNetworkUsingVectorization():
             # print("B1 ", B1.shape, dB1.shape)
             # print("B2 ", B2.shape, dB2.shape)
             # print("accuracy: ",realScore/m * 100)    
-            print("cost: ", np.mean(J))
+            print(i+1,"th cost: ", np.mean(J))
      
 
 

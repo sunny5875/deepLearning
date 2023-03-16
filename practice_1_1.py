@@ -145,20 +145,20 @@ def executeBinaryClassificationUsingVectorization():
         dw = 1/m * X @ dZ.T
         db = 1/m * np.sum(dZ)
         
-        J /= m
         W = W - alpha * dw
         b = b - alpha * db
 
 
         if (i+1) % 500 == 0 :
+            print("-------------")
             print(i+1,"th update parameter: ", w1 , w2, b)
             realScore = 0
-            for i in range(m):
-                if A[0,i] > limit:
-                    if 1 == Y[0,i]:
+            for n in range(m):
+                if A[0,n] > limit:
+                    if 1 == Y[0,n]:
                         realScore += 1
                 else:
-                    if 0 == Y[0,i]:
+                    if 0 == Y[0,n]:
                         realScore += 1
     
             print(i+1,"th accuracy: ",realScore/m * 100) 
