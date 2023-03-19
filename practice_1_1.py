@@ -41,7 +41,7 @@ def generateSampleMatrix():
         X[0,i] =  x_train[0,0]
         X[1,i] =  x_train[0,1]
       
-        if x_train[0,0] < -5 or x_train[0,1] > 5:
+        if x_train[0,0] < -5 or x_train[0,0] > 5:
             Y[0,i] = 1
             count += 1
         else:
