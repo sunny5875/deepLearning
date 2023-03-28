@@ -6,6 +6,7 @@ n = 1000 # test sample 수
 limit = 0.5 # output limit
 alpha = 0.01 # learning rate
 k = 5000 # iteration 수
+check = k /10 # print하는 수
 
 def sigmoid(x):
     return 1 / (1 +np.exp(-x))
@@ -44,24 +45,7 @@ def generateTestMatrix():
             Y[0,i] = 0
 
     return (X,Y)
-
-def generate_and_save_dataset(size):
-    x = []
-    y = []
-    for _ in range(size):
-        temp = np.array([random.uniform(-10, 10), random.uniform(-10, 10)])
-        x.append(temp)
-
-        if temp[0] < -5 or temp[0] > 5:#temp.sum() > 0:
-            y.append(1)
-        else:
-            y.append(0)
-    
-    x = np.array(x)
-    y = np.array(y)
-
-    return x, y
-    
+  
 def logisticRegressionModel(w, b, x):
     return sigmoid(np.dot(w, x)+b)
 
@@ -70,25 +54,24 @@ def executeSimpleNeuralNetworkUsingVectorization():
 
     # initialize weight and bias
     W1 = np.array([[random.uniform(-10,10), random.uniform(-10,10)],
-                   [random.uniform(-10,10), random.uniform(-10,10)],
-                   [random.uniform(-10,10), random.uniform(-10,10)]]) #(3,2)
-    B1 = np.array([[random.uniform(-10,10)], [random.uniform(-10,10)],[random.uniform(-10,10)]])#(3,1)
-    W2 = np.array([[random.uniform(-10,10), random.uniform(-10,10),random.uniform(-10,10)]])#(1,3)
+                   [random.uniform(-10,10), random.uniform(-10,10)]]) #(2,2)
+    B1 = np.array([[random.uniform(-10,10)], 
+                    [random.uniform(-10,10)]])#(2,1)
+    W2 = np.array([[random.uniform(-10,10), random.uniform(-10,10)]])#(1,2)
     B2 = random.uniform(-10,10)#(1,1)
+    print('initial W1 = ',W1)
+    print('initial B1 = ',B1)     
+    print('initial W2 = ',W2)
+    print('initial B2 = ',B2)
     # generate sample
     X, Y = generateTrainMatrix()
  
+    train_accuracy = 0.0
     
     for i in range(k):
         cost = 0
 
-        # hidden layer forward progpatgation
-        # Z1 = np.matmul(W1.T, X) + B1 #(2,m)
-        # A1 = sigmoid(Z1) #(2,m)
-        # # output forward propagation
-        # Z2 = np.matmul(W2, A1) + B2 #(1,m)
-        # A2 = sigmoid(Z2) #(1,m)
-        # J += cross_entropy_loss(A2, Y)
+        # forward progpatgation
         A1 = logisticRegressionModel(W1,B1,X)
         A2 = logisticRegressionModel(W2,B2,A1)
         cost = -cross_entropy_loss(A2, Y).sum()/m
@@ -115,7 +98,7 @@ def executeSimpleNeuralNetworkUsingVectorization():
             alpha = 0.01
 
           
-        if (i+1) % 500 == 0 :
+        if (i+1) % check == 0 :
             print('-------------------', i+1, "th training RESULT -------------------")
             print('Estimated W1 = ',W1)
             print('Estimated B1 = ',B1)     
@@ -124,13 +107,19 @@ def executeSimpleNeuralNetworkUsingVectorization():
             print("training cost: ", cost)
             A2[A2>0.5] = 1
             A2[A2<0.5] = 0
+            old_train_accuacy = train_accuracy
             train_accuracy = np.sum(Y==A2)/m*100
             print("training accuracy: %.2f%%" %(train_accuracy))#np.mean(J))
 
-            if train_accuracy < 50:
-                alpha = 3
+            if train_accuracy >= old_train_accuacy :
+                alpha += 1
      
 
+    A1 = logisticRegressionModel(W1,B1,X)
+    A2 = logisticRegressionModel(W2,B2,A1)
+    A2[A2>0.5] = 1
+    A2[A2<0.5] = 0
+    train_accuracy = np.sum(Y == A2)/m*100
 
     test_X, test_Y = generateTestMatrix()
     A1 = logisticRegressionModel(W1,B1,test_X)
@@ -144,8 +133,9 @@ def executeSimpleNeuralNetworkUsingVectorization():
     print('Estimated W2 = ',W2)
     print('Estimated B2 = ',B2)
     print('final alpha: ', alpha)
-    print("final accuracy: %.2f%%" %(test_accuracy))
+    print("final train accuracy: %.2f%%" %(train_accuracy))
+    print("final test accuracy: %.2f%%" %(test_accuracy))
 
 
-
-executeSimpleNeuralNetworkUsingVectorization()
+if __name__ == '__main__':
+    executeSimpleNeuralNetworkUsingVectorization()
