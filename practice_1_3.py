@@ -56,12 +56,12 @@ def executeSimpleNeuralNetworkUsingVectorization():
     global alpha
 
     # initialize weight and bias
-    W1 = np.array([[random.uniform(-10,10), random.uniform(-10,10)],
-                   [random.uniform(-10,10), random.uniform(-10,10)]]) #(2,2)
-    B1 = np.array([[random.uniform(-10,10)], 
-                    [random.uniform(-10,10)]])#(2,1)
-    W2 = np.array([[random.uniform(-10,10), random.uniform(-10,10)]])#(1,2)
-    B2 = random.uniform(-10,10)#(1,1)
+    W1 = np.array([[random.uniform(-1,1), random.uniform(-1,1)],
+                   [random.uniform(-1,1), random.uniform(-1,1)]]) #(2,2)
+    B1 = np.array([[random.uniform(-1,1)], 
+                    [random.uniform(-1,1)]])#(2,1)
+    W2 = np.array([[random.uniform(-1,1), random.uniform(-1,1)]])#(1,2)
+    B2 = random.uniform(-1,1)#(1,1)
     print('initial W1 = ',W1)
     print('initial B1 = ',B1)     
     print('initial W2 = ',W2)
@@ -116,9 +116,9 @@ def executeSimpleNeuralNetworkUsingVectorization():
             print("current test accuracy: %.2f%%" %(test_accuracy))
            
             if train_accuracy < 90:
-                # alpha = ((100-train_accuracy)/ 100) * 3
+                alpha = ((100-train_accuracy)/ 100) 
                 # alpha += 1
-                alpha = 3
+                # alpha = 3
             else:
                 alpha = 0.01
 
