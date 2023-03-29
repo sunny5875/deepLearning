@@ -100,17 +100,25 @@ def executeSimpleNeuralNetworkUsingVectorization():
           
         if (i+1) % check == 0 :
             print('-------------------', i+1, "th training RESULT -------------------")
-            print('Estimated W1 = ',W1)
-            print('Estimated B1 = ',B1)     
-            print('Estimated W2 = ',W2)
-            print('Estimated B2 = ',B2)
-            print("training cost: ", cost)
+            print('current W1 = ',W1)
+            print('current B1 = ',B1)     
+            print('current W2 = ',W2)
+            print('current B2 = ',B2)
+            print("current training cost: ", cost)
+            print('current alpha: ', alpha)
             A2[A2>0.5] = 1
             A2[A2<0.5] = 0
             old_train_accuacy = train_accuracy
             train_accuracy = np.sum(Y==A2)/m*100
-            print("training accuracy: %.2f%%" %(train_accuracy))#np.mean(J))
-
+            print("current train accuracy: %.2f%%" %(train_accuracy))#np.mean(J))
+            test_X, test_Y = generateTestMatrix()
+            A1 = logisticRegressionModel(W1,B1,test_X)
+            A2 = logisticRegressionModel(W2,B2,A1)
+            A2[A2>0.5] = 1
+            A2[A2<0.5] = 0
+            test_accuracy = np.sum(test_Y == A2)/n*100
+            print("current test accuracy: %.2f%%" %(test_accuracy))
+           
             if train_accuracy >= old_train_accuacy :
                 alpha += 1
      
@@ -120,6 +128,7 @@ def executeSimpleNeuralNetworkUsingVectorization():
     A2[A2>0.5] = 1
     A2[A2<0.5] = 0
     train_accuracy = np.sum(Y == A2)/m*100
+    cost = -cross_entropy_loss(A2, Y).sum()/m
 
     test_X, test_Y = generateTestMatrix()
     A1 = logisticRegressionModel(W1,B1,test_X)
@@ -128,10 +137,11 @@ def executeSimpleNeuralNetworkUsingVectorization():
     A2[A2<0.5] = 0
     test_accuracy = np.sum(test_Y == A2)/n*100
     print('------------------- Final RESULT -------------------')
-    print('Estimated W1 = ',W1)
-    print('Estimated B1 = ',B1)     
-    print('Estimated W2 = ',W2)
-    print('Estimated B2 = ',B2)
+    print('estimated W1 = ',W1)
+    print('estimated B1 = ',B1)     
+    print('estimated W2 = ',W2)
+    print('estimated B2 = ',B2)
+    print("training cost: ", cost)
     print('final alpha: ', alpha)
     print("final train accuracy: %.2f%%" %(train_accuracy))
     print("final test accuracy: %.2f%%" %(test_accuracy))
