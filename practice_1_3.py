@@ -90,8 +90,6 @@ def executeSimpleNeuralNetworkUsingVectorization():
         dW1 = 1/m * np.dot(dZ1, X.transpose())#np.matmul(dZ1, X.T)#dZ1 @ X.T #(2,2)
         dB1 = 1/m * np.sum(dZ1, axis = 1, keepdims = True) #(2,1)
 
-
-
           
         if (i+1) % check == 0 :
             print('-------------------', i+1, "th training RESULT -------------------")
@@ -119,6 +117,7 @@ def executeSimpleNeuralNetworkUsingVectorization():
            
             if train_accuracy < 90:
                 # alpha = ((100-train_accuracy)/ 100) * 3
+                # alpha += 1
                 alpha = 3
             else:
                 alpha = 0.01
