@@ -82,19 +82,19 @@ def train_and_test(train_x, train_y, test_x, test_y, iteration, alpha, w1, b1, w
         w2 = w2 - alpha*dw2
         b2 -= alpha*db2
         
-        # if log_step and (step+1) % 50 == 0:
-        print('Iteration #',(step+1))
-        print('Now W1 = ', w1)
-        print('Now B1 = ', b1)            
-        print('Now W2 = ', w2)
-        print('Now B2 = ', b2)
-        print()
-        print('Cost for Training Dataset = ', train_cost)
-        print('Cost for Testing Dataset  = ', test_cost)
-        print()
-        print('Accuracy for Training Dataset = %.2f%%' % (train_accuracy))
-        print('Accuracy for Testing Dataset  = %.2f%%' % (test_accuracy))
-        print()
+        if (step+1) % 500 == 0:
+            print('Iteration #',(step+1))
+            print('Now W1 = ', w1)
+            print('Now B1 = ', b1)            
+            print('Now W2 = ', w2)
+            print('Now B2 = ', b2)
+            print()
+            print('Cost for Training Dataset = ', train_cost)
+            print('Cost for Testing Dataset  = ', test_cost)
+            print()
+            print('Accuracy for Training Dataset = %.2f%%' % (train_accuracy))
+            print('Accuracy for Testing Dataset  = %.2f%%' % (test_accuracy))
+            print()
     end = time.time()
 
     training_time = end-start
