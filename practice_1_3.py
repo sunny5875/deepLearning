@@ -1,5 +1,4 @@
 import random
-from tkinter import E
 import numpy as np 
 
 m = 10000 # sample training 수
